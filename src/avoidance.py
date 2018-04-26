@@ -1,5 +1,5 @@
-from motors_pwm import *
-from distance import *
+from src.motors_pwm import *
+from src.distance import *
 
 global speed
 speed = 30

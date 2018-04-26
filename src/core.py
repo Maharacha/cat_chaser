@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from motors_pwm import *
-from distance import *
-from avoidance import *
+from src.motors_pwm import *
+from src.distance import *
+from src.avoidance import *
 
 def distance_test():
     distance_init()

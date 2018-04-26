@@ -48,22 +48,22 @@ def all_motors_off():
     pwmMotorBForwards.ChangeDutyCycle(0)
     pwmMotorBBackwards.ChangeDutyCycle(0)
 
-def a_forwards(duty_cycle):
+def a_forwards(duty_cycle=25):
     # Turn the left motor forwards
     pwmMotorAForwards.ChangeDutyCycle(duty_cycle)
     pwmMotorABackwards.ChangeDutyCycle(0)
 
-def b_forwards(duty_cycle):
+def b_forwards(duty_cycle=25):
     # Turn the right motor forwards
     pwmMotorBForwards.ChangeDutyCycle(duty_cycle)
     pwmMotorBBackwards.ChangeDutyCycle(0)
 
-def a_backwards(duty_cycle):
+def a_backwards(duty_cycle=25):
     # Turn the left motor backwards
     pwmMotorAForwards.ChangeDutyCycle(0)
     pwmMotorABackwards.ChangeDutyCycle(duty_cycle)
 
-def b_backwards(duty_cycle):
+def b_backwards(duty_cycle=25):
     # Turn the right motor backwards
     pwmMotorBForwards.ChangeDutyCycle(0)
     pwmMotorBBackwards.ChangeDutyCycle(duty_cycle)
