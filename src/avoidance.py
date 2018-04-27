@@ -1,32 +1,42 @@
 from src.motors_pwm import *
 from src.distance import *
+import threading
+import time
 
-global speed
-speed = 30
-global near_threshold
-near_threshold= 15
+class Avoidance():
 
-# Return True if the ultrasonic sensor sees an obstacle
-def is_near_obstacle():
-    distance = get_distance()
+    def __init__(self, motors_obj):
+        self.motors_obj = motors_obj
+        distance_init()
+        self.speed = 30
+        self.near_threshold = 15
+        thread = threading.Thread(target=self._thread)
+        thread.start()
+    
+    # Return True if the ultrasonic sensor sees an obstacle
+    def is_near_obstacle(self):
+        distance = get_distance()
+        
+        # print("IsNearObstacle: "+str(Distance))
+        if distance < self.near_threshold and distance > 0:
+            return True
+        else:
+            return False
 
-    # print("IsNearObstacle: "+str(Distance))
-    if distance < near_threshold:
-        return True
-    else:
-        return False
+    # Move back a little, then turn right
+    def avoid_obstacle(self):
+        # Back off a little
+        self.motors_obj.a_backwards(self.speed)
+        self.motors_obj.b_backwards(self.speed)
+        time.sleep(0.5)
+        self.motors_obj.all_motors_off()
+        
+        # Turn right
+        self.motors_obj.a_forwards(self.speed)
+        time.sleep(0.75)
+        self.motors_obj.all_motors_off()
 
-# Move back a little, then turn right
-def avoid_obstacle():
-    # Back off a little
-    print("Backwards")
-    a_backwards(speed)
-    b_backwards(speed)
-    time.sleep(0.5)
-    all_motors_off()
-
-    # Turn right
-    print("Right")
-    a_forwards(speed)
-    time.sleep(0.75)
-    all_motors_off()
+    def _thread(self):
+        while True:
+            if self.is_near_obstacle():
+                self.avoid_obstacle()

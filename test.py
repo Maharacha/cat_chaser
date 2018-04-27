@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from src.motors_pwm import *
 from src.distance import *
 from src.avoidance import *
@@ -8,7 +7,8 @@ def distance_test():
     try:
         while True:
             dist = get_distance()
-            print("%.2f" % dist)
+            if dist < 20:
+                print("%.2f" % dist)
     # If you press CTRL+C, cleanup and stop
     except KeyboardInterrupt:
         # Reset GPIO settings
@@ -40,4 +40,4 @@ def main():
     return
 
 if __name__ == '__main__':
-    avoidance_test()
+    distance_test()

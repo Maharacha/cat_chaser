@@ -1,83 +1,81 @@
 import RPi.GPIO as GPIO # Import the GPIO Library
 import time # Import the Time library
+import threading
 
-# Set variables for the GPIO motor pins
-pinMotorAForwards = 10  #  left motor
-pinMotorABackwards = 9  #  left motor
-pinMotorBForwards = 7  #  right motor
-pinMotorBBackwards = 8  #  right motor
 
-# pwmMotorAForwards = 0
-# pwmMotorABackwards = 0
-# pwmMotorBForwards = 0
-# pwmMotorBBackwards = 0
+class MotorsPwm():
+
+    def __init__(self):
+        # Set variables for the GPIO motor pins
+        self.pinMotorAForwards = 10  #  left motor
+        self.pinMotorABackwards = 9  #  left motor
+        self.pinMotorBForwards = 7  #  right motor
+        self.pinMotorBBackwards = 8  #  right motor
+        
+        # How many times to turn the pin on and off each second
+        self.frequency = 20
     
-# How many times to turn the pin on and off each second
-Frequency = 20
+    def all_motors_init(self):
+        # Set the GPIO modes
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        
+        GPIO.setup(self.pinMotorAForwards, GPIO.OUT)
+        GPIO.setup(self.pinMotorABackwards, GPIO.OUT)
+        GPIO.setup(self.pinMotorBForwards, GPIO.OUT)
+        GPIO.setup(self.pinMotorBBackwards, GPIO.OUT)
+        
+        # Set the GPIO to software PWM at 'Frequency' Hertz
+        self.pwmMotorAForwards = GPIO.PWM(self.pinMotorAForwards, self.frequency)
+        self.pwmMotorABackwards = GPIO.PWM(self.pinMotorABackwards, self.frequency)
+        self.pwmMotorBForwards = GPIO.PWM(self.pinMotorBForwards, self.frequency)
+        self.pwmMotorBBackwards = GPIO.PWM(self.pinMotorBBackwards, self.frequency)
+        
+        # Start the software PWM with a duty cycle of 0 (i.e. not moving)
+        self.pwmMotorAForwards.start(0)
+        self.pwmMotorABackwards.start(0)
+        self.pwmMotorBForwards.start(0)
+        self.pwmMotorBBackwards.start(0)
+        
+    def all_motors_off(self):
+        # Turn all motors off
+        self.pwmMotorAForwards.ChangeDutyCycle(0)
+        self.pwmMotorABackwards.ChangeDutyCycle(0)
+        self.pwmMotorBForwards.ChangeDutyCycle(0)
+        self.pwmMotorBBackwards.ChangeDutyCycle(0)
+        
+    def a_forwards(self, duty_cycle=25):
+        # Turn the left motor forwards
+        self.pwmMotorAForwards.ChangeDutyCycle(duty_cycle)
+        self.pwmMotorABackwards.ChangeDutyCycle(0)
+        
+    def b_forwards(self, duty_cycle=25):
+        # Turn the right motor forwards
+        self.pwmMotorBForwards.ChangeDutyCycle(duty_cycle)
+        self.pwmMotorBBackwards.ChangeDutyCycle(0)
+        
+    def a_backwards(self, duty_cycle=25):
+        # Turn the left motor backwards
+        self.pwmMotorAForwards.ChangeDutyCycle(0)
+        self.pwmMotorABackwards.ChangeDutyCycle(duty_cycle)
 
-def all_motors_init():
-    # Set the GPIO modes
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
+    def b_backwards(self, duty_cycle=25):
+        # Turn the right motor backwards
+        self.pwmMotorBForwards.ChangeDutyCycle(0)
+        self.pwmMotorBBackwards.ChangeDutyCycle(duty_cycle)
 
-    GPIO.setup(pinMotorAForwards, GPIO.OUT)
-    GPIO.setup(pinMotorABackwards, GPIO.OUT)
-    GPIO.setup(pinMotorBForwards, GPIO.OUT)
-    GPIO.setup(pinMotorBBackwards, GPIO.OUT)
+    def a_off(self):
+        # Turn the left motor off
+        self.pwmMotorAForwards.ChangeDutyCycle(0)
+        self.pwmMotorABackwards.ChangeDutyCycle(0)
 
-    # Set the GPIO to software PWM at 'Frequency' Hertz
-    global pwmMotorAForwards
-    pwmMotorAForwards = GPIO.PWM(pinMotorAForwards, Frequency)
-    global pwmMotorABackwards
-    pwmMotorABackwards = GPIO.PWM(pinMotorABackwards, Frequency)
-    global pwmMotorBForwards
-    pwmMotorBForwards = GPIO.PWM(pinMotorBForwards, Frequency)
-    global pwmMotorBBackwards
-    pwmMotorBBackwards = GPIO.PWM(pinMotorBBackwards, Frequency)
+    def b_off(self):
+        # Turn the right motor off
+        self.pwmMotorBForwards.ChangeDutyCycle(0)
+        self.pwmMotorBBackwards.ChangeDutyCycle(0)
 
-    # Start the software PWM with a duty cycle of 0 (i.e. not moving)
-    pwmMotorAForwards.start(0)
-    pwmMotorABackwards.start(0)
-    pwmMotorBForwards.start(0)
-    pwmMotorBBackwards.start(0)
+    def all_motors_reset(self):
+        # Reset the GPIO pins (turns off motors too)
+        GPIO.cleanup()
 
-def all_motors_off():
-    # Turn all motors off
-    pwmMotorAForwards.ChangeDutyCycle(0)
-    pwmMotorABackwards.ChangeDutyCycle(0)
-    pwmMotorBForwards.ChangeDutyCycle(0)
-    pwmMotorBBackwards.ChangeDutyCycle(0)
-
-def a_forwards(duty_cycle=25):
-    # Turn the left motor forwards
-    pwmMotorAForwards.ChangeDutyCycle(duty_cycle)
-    pwmMotorABackwards.ChangeDutyCycle(0)
-
-def b_forwards(duty_cycle=25):
-    # Turn the right motor forwards
-    pwmMotorBForwards.ChangeDutyCycle(duty_cycle)
-    pwmMotorBBackwards.ChangeDutyCycle(0)
-
-def a_backwards(duty_cycle=25):
-    # Turn the left motor backwards
-    pwmMotorAForwards.ChangeDutyCycle(0)
-    pwmMotorABackwards.ChangeDutyCycle(duty_cycle)
-
-def b_backwards(duty_cycle=25):
-    # Turn the right motor backwards
-    pwmMotorBForwards.ChangeDutyCycle(0)
-    pwmMotorBBackwards.ChangeDutyCycle(duty_cycle)
-
-def a_off():
-    # Turn the left motor off
-    pwmMotorAForwards.ChangeDutyCycle(0)
-    pwmMotorABackwards.ChangeDutyCycle(0)
-
-def b_off():
-    # Turn the right motor off
-    pwmMotorBForwards.ChangeDutyCycle(0)
-    pwmMotorBBackwards.ChangeDutyCycle(0)
-
-def all_motors_reset():
-    # Reset the GPIO pins (turns off motors too)
-    GPIO.cleanup()
+        

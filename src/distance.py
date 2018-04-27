@@ -42,10 +42,10 @@ def get_distance():
         # If the sensor is too close to an object, the Pi cannot
         # see the echo quickly enough, so we have to detect that
         # problem and say what has happened.
-        if StopTime-StartTime >= 0.04:
-            print("Hold on there!  You're too close for me to see.")
-            StopTime = StartTime
-            break
+        #if StopTime-StartTime >= 0.04:
+        #    print("Hold on there!  You're too close for me to see. Time: ", StopTime - StartTime)
+        #    StopTime = StartTime
+        #    break
 
     # Calculate pulse length
     ElapsedTime = StopTime - StartTime

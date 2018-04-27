@@ -3,8 +3,11 @@ from http import HTTPStatus
 import socket
 from src.motors_pwm import *
 from src.camera import *
+from src.avoidance import *
 
-all_motors_init()
+motors_obj = MotorsPwm()
+motors_obj.all_motors_init()
+avoidance_obj = Avoidance(motors_obj)
 camera_obj = Camera()
 
 # Get server ip
@@ -35,19 +38,19 @@ def video_feed():
 def reroute(action):
 
     if action == 'left':
-        b_forwards()
-        a_backwards()
+        motors_obj.b_forwards()
+        motors_obj.a_backwards()
     elif action == 'forward':
-        a_forwards()
-        b_forwards()
+        motors_obj.a_forwards()
+        motors_obj.b_forwards()
     elif action == 'right':
-        a_forwards()
-        b_backwards()
+        motors_obj.a_forwards()
+        motors_obj.b_backwards()
     elif action == 'reverse':
-        a_backwards()
-        b_backwards()
+        motors_obj.a_backwards()
+        motors_obj.b_backwards()
     elif action == 'stop':
-        all_motors_off()
+        motors_obj.all_motors_off()
     else:
         print('Wrong command')
     

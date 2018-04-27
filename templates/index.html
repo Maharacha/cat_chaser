@@ -15,24 +15,23 @@ table ,td, tr {
 
 	<body>
 		<img src="{{ url_for('video_feed') }}"></img>
-
 		<table style="width:100%; max-width: 500px; height:300px;">
 			<tr>
 				<td>
-					<form action="/motor/left" method="POST">
+					<form name="motor_left" action="/motor/left" method="POST">
 						<input type="image" name="direction" src="/static/img/left.svg" value="left" style="float:left; width:80% ;">
 						</br>
 					</form>
 				</td>
 				<td>
-					<form action="/motor/forward" method="POST">
+					<form name="motor_forward" action="/motor/forward" method="POST">
 						<input type="image" name="direction" src="/static/img/forward.svg" value="forward" style="float:left; width:80%;">
 						</br>
 					</form>
 				</td>
 				<td>
 
-					<form action="/motor/right" method="POST">
+					<form name="motor_right" action="/motor/right" method="POST">
 						<input type="image" name="direction" src="/static/img/right.svg" value="right" style="float:left; width:80%;">
 						</br>
 					</form>
@@ -41,19 +40,40 @@ table ,td, tr {
 			</tr>
 			<tr>
 				<td>
-					<form action="/motor/reverse" method="POST">
+					<form name="motor_reverse" action="/motor/reverse" method="POST">
 						<input type="image" name="direction" src="/static/img/reverse.svg" value="reverse" style=" margin-left:80px; width:80%;">
 						</br>
 					</form>
 				</td>
 				<td>
-					<form action="/motor/stop" method="POST">
+					<form name="motor_stop" action="/motor/stop" method="POST">
 						<input type="image" name="direction" src="/static/img/stop.svg" value="stop" style="margin-left:80px; width:80%;">
 						</br>
 					</form>
 				</td>
 			</tr>
 		</table>
+   		<script>	
+		  document.onkeydown = function(e) {
+		  switch (e.keyCode) {
+		  case 37:
+		  document.motor_left.submit();
+		  break;
+		  case 38:
+		  document.motor_forward.submit();
+		  break;
+		  case 39:
+		  document.motor_right.submit();
+		  break;
+		  case 40:
+		  document.motor_reverse.submit();
+		  break;
+		  case 32:
+		  document.motor_stop.submit();
+		  break;
+		  }
+		  };
+		</script>
 
 	</body>
 </html>
