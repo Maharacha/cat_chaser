@@ -30,12 +30,12 @@ class Avoidance():
         self.motors_obj.b_backwards(self.speed)
         time.sleep(0.5)
         self.motors_obj.all_motors_off()
-        
+        '''
         # Turn right
         self.motors_obj.a_forwards(self.speed)
         time.sleep(0.75)
         self.motors_obj.all_motors_off()
-
+        '''
     def _thread(self):
         while True:
             if self.is_near_obstacle():

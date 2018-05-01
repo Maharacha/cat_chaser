@@ -51,7 +51,7 @@ class MotorsPwm():
         
     def b_forwards(self, duty_cycle=25):
         # Turn the right motor forwards
-        self.pwmMotorBForwards.ChangeDutyCycle(duty_cycle)
+        self.pwmMotorBForwards.ChangeDutyCycle(duty_cycle + 3)
         self.pwmMotorBBackwards.ChangeDutyCycle(0)
         
     def a_backwards(self, duty_cycle=25):
@@ -62,7 +62,7 @@ class MotorsPwm():
     def b_backwards(self, duty_cycle=25):
         # Turn the right motor backwards
         self.pwmMotorBForwards.ChangeDutyCycle(0)
-        self.pwmMotorBBackwards.ChangeDutyCycle(duty_cycle)
+        self.pwmMotorBBackwards.ChangeDutyCycle(duty_cycle + 5)
 
     def a_off(self):
         # Turn the left motor off
