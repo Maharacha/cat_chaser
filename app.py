@@ -4,6 +4,7 @@ import socket
 from src.motors_pwm import *
 from src.camera import *
 from src.avoidance import *
+from src.voice import *
 
 motors_obj = MotorsPwm()
 motors_obj.all_motors_init()
@@ -33,6 +34,13 @@ def video_feed():
     global camera_obj
     return Response(gen(camera_obj),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/voice/speak', methods=['POST'])
+def speak():
+    text = request.form.get('speech_text')
+    print('Saying: ', text)
+    synthesize_text(text)
+    return('', HTTPStatus.NO_CONTENT)
 
 @app.route('/motor/<action>', methods=['POST'])
 def reroute(action):
